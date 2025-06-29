@@ -1,0 +1,132 @@
+<div class="min-h-screen bg-gray-50">
+  <p-toast></p-toast>
+  
+  <p-toolbar class="bg-blue-600 text-white shadow-lg">
+    <div class="flex items-center justify-between w-full">
+      <div class="flex items-center space-x-4">
+        <h1 class="text-xl font-bold">TurtleShop</h1>
+        <span class="text-blue-600">Products</span>
+      </div>
+      
+      <div class="flex items-center space-x-4">
+        <!-- User Info -->
+        @if (user$ | async; as user) {
+          <span class="hidden md:block text-sm text-blue-600">
+            Welcome, {{ user.firstName }}!
+          </span>
+        }
+        
+        <div class="relative">
+          <p-button 
+            label="Favorites"
+            data-cy="favorites-button"
+            icon="pi pi-heart"
+            severity="secondary"
+            (click)="goToFavorites()"
+            class="favorites-btn">
+          </p-button>
+          <span 
+            data-cy="favorites-badge"
+            class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full min-w-[20px] h-5 flex items-center justify-center px-1">
+            {{ (favoriteProducts$ | async)?.length || 0 }}
+          </span>
+        </div>
+        
+        <p-button 
+          label="Logout"
+          data-cy="logout-button"
+          icon="pi pi-sign-out"
+          severity="secondary"
+          (click)="onLogout()">
+        </p-button>
+      </div>
+    </div>
+  </p-toolbar>
+
+  <!-- Main Content -->
+  <div class="container mx-auto px-4 py-8">
+    @if (loading$ | async) {
+      <div class="flex flex-col items-center justify-center py-20">
+        <p-progressSpinner></p-progressSpinner>
+        <p class="mt-4 text-gray-600">Loading products...</p>
+      </div>
+    }
+    
+    @else if (error$ | async) {
+      <div class="flex flex-col items-center justify-center py-20">
+        <i class="pi pi-exclamation-triangle text-4xl text-red-500 mb-4"></i>
+        <p class="text-gray-600 mb-4">{{ error$ | async }}</p>
+        <p-button 
+          label="Retry"
+          icon="pi pi-refresh"
+          (click)="loadProducts()">
+        </p-button>
+      </div>
+    }
+    
+    <!-- Products Grid -->
+    @else {
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        @for (product of products$ | async; track product.id) {
+          <p-card data-cy="product-card" class="product-card h-full">
+            <ng-template pTemplate="header">
+              <div class="relative overflow-hidden">
+                <img 
+                  data-cy="product-image"
+                  [src]="product.thumbnail" 
+                  [alt]="product.title"
+                  class="w-full h-48 object-cover transition-transform hover:scale-105"
+                  (error)="onImageError($event)">
+                
+                <p-button 
+                  data-cy="favorite-button"
+                  [icon]="product.isFavorite ? 'pi pi-heart-fill' : 'pi pi-heart'"
+                  [severity]="product.isFavorite ? 'danger' : 'secondary'"
+                  [rounded]="true"
+                  class="absolute top-2 right-2 favorite-btn"
+                  (click)="onToggleFavorite(product.id)">
+                </p-button>
+              </div>
+            </ng-template>
+            
+            <div class="space-y-3">
+              <h3 data-cy="product-title" class="text-lg font-semibold text-gray-800 line-clamp-2">
+                {{ product.title }}
+              </h3>
+              
+              <p class="text-sm text-gray-600 line-clamp-3">
+                {{ product.description }}
+              </p>
+              
+              <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                  <span data-cy="product-price" class="text-2xl font-bold text-blue-600">
+                    ${{ product.price }}
+                  </span>
+                  @if (product.discountPercentage > 0) {
+                    <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">
+                      {{ product.discountPercentage }}% OFF
+                    </span>
+                  }
+                </div>
+              </div>
+              
+              <div class="flex items-center space-x-1">
+                <i class="pi pi-star-fill text-yellow-400"></i>
+                <span class="text-sm text-gray-600">{{ product.rating }}/5</span>
+                <span class="text-xs text-gray-400">({{ product.reviews.length || 0 }} reviews)</span>
+              </div>
+            </div>
+          </p-card>
+        }
+      </div>
+      
+      @if ((products$ | async)?.length === 0) {
+        <div class="flex flex-col items-center justify-center py-20">
+          <i class="pi pi-shopping-cart text-4xl text-gray-400 mb-4"></i>
+          <p class="text-gray-600">No products found</p>
+        </div>
+      }
+    }
+  </div>
+</div> 

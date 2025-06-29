@@ -1,27 +1,213 @@
-# ShopWebApp
+# TurtleShop - Angular E-commerce Application
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.20.
+A modern Angular web application built with standalone components, NgRx state management, PrimeNG UI components, and Tailwind CSS.
 
-## Development server
+## 🚀 Features
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+- **🔐 Authentication System**: Secure login with JWT token management
+- **🛒 Product Catalog**: Browse and view product details
+- **⭐ Favorites Management**: Add/remove products from favorites with session-based storage
+- **📱 Responsive Design**: Mobile-first approach with Tailwind CSS
+- **🔄 State Management**: Redux pattern implementation with NgRx
+- **🧪 Testing**: Unit tests with Jasmine and E2E tests with Cypress
+- **⚡ Modern Angular**: Standalone components with Angular 18+ features (@if, @for, @defer)
 
-## Code scaffolding
+## 🏗️ Architecture
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### State Management (NgRx)
+The application uses NgRx for centralized state management with the Redux pattern:
 
-## Build
+```
+src/app/store/
+├── models/           # TypeScript interfaces
+├── auth/            # Authentication state
+│   ├── auth.actions.ts
+│   ├── auth.reducer.ts
+│   ├── auth.effects.ts
+│   └── auth.selectors.ts
+├── products/        # Products state
+│   ├── products.actions.ts
+│   ├── products.reducer.ts
+│   ├── products.effects.ts
+│   └── products.selectors.ts
+└── index.ts         # Root state configuration
+```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+**Complex Implementation Details:**
 
-## Running unit tests
+1. **Session-based Favorites Logic**: The most complex part is the favorites management system:
+   - Products marked as favorites are stored in memory using a `Set<number>` for O(1) lookup performance
+   - When a user unmarks a favorite on the favorites page, the product remains visible until navigation
+   - This is achieved by maintaining a `visibleProducts` array in the FavoritesComponent that tracks the UI state separately from the NgRx store
+   - The store maintains the source of truth for actual favorites, while the component manages the "temporary visibility" requirement
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+2. **Authentication Flow with Effects**: 
+   - Uses NgRx Effects for side effects like HTTP calls and localStorage management
+   - Implements automatic token persistence and restoration on app startup
+   - Guards protect routes and automatically redirect unauthenticated users
 
-## Running end-to-end tests
+3. **Error Handling Strategy**:
+   - Centralized error handling through NgRx effects with automatic retry mechanisms
+   - User-friendly error messages via PrimeNG Toast notifications
+   - Graceful fallbacks for failed image loading
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+### Component Architecture
 
-## Further help
+Each component follows the 4-file structure:
+- `*.component.ts` - Component logic
+- `*.component.html` - Template 
+- `*.component.scss` - Styles
+- `*.component.spec.ts` - Unit tests
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+```
+src/app/components/
+├── login/
+│   ├── login.component.ts
+│   ├── login.component.html
+│   ├── login.component.scss
+│   └── login.component.spec.ts
+├── product-list/
+│   └── ... (same structure)
+└── favorites/
+    └── ... (same structure)
+```
+
+## 🛠️ Technology Stack
+
+- **Framework**: Angular 18 with standalone components
+- **State Management**: NgRx (Store, Effects, Devtools)
+- **UI Library**: PrimeNG 18
+- **Styling**: Tailwind CSS 3
+- **HTTP Client**: Angular HttpClient with interceptors
+- **Testing**: Jasmine (unit), Cypress (E2E)
+- **Build Tool**: Angular CLI
+- **Package Manager**: npm
+
+## 📋 Prerequisites
+
+- Node.js 18+ 
+- npm 9+
+- Angular CLI 18+
+
+## 🚀 Getting Started
+
+### 1. Clone and Install Dependencies
+
+```bash
+git clone <repository-url>
+cd shop-web-app
+npm install
+```
+
+### 2. Development Server
+
+```bash
+npm start
+# or
+ng serve
+```
+
+Navigate to `http://localhost:4200`. The application will automatically reload if you change any source files.
+
+### 3. Demo Credentials
+
+**Username**: `emilys`  
+**Password**: `emilyspass`
+
+## 🧪 Testing
+
+### Unit Tests
+```bash
+npm test
+# or
+ng test
+```
+
+### E2E Tests
+```bash
+# Start the development server first
+npm start
+
+# In another terminal
+npm run e2e
+# or
+npx cypress open
+```
+
+### Test Coverage
+The application includes comprehensive testing:
+- **Login Component**: Form validation, authentication flow, error handling
+- **Product List Component**: Product loading, favorite toggling, navigation
+- **Favorites Component**: Favorites display, session-based visibility logic
+- **E2E Tests**: Complete user journeys from login to favorites management
+
+## 🎨 UI/UX Features
+
+### Design System
+- **Color Palette**: Blue primary, Orange accents for favorites
+- **Typography**: System fonts with proper hierarchy
+- **Spacing**: Consistent 8px grid system
+- **Animations**: Smooth transitions and hover effects
+
+### Responsive Design
+- **Mobile-first**: Tailwind's responsive utilities
+- **Breakpoints**: sm (640px), md (768px), lg (1024px), xl (1280px)
+- **Grid System**: CSS Grid for product layouts
+- **Navigation**: Adaptive toolbar that collapses on mobile
+
+### Accessibility
+- **Semantic HTML**: Proper heading hierarchy and landmarks
+- **ARIA Labels**: Screen reader support
+- **Keyboard Navigation**: Full keyboard accessibility
+- **Color Contrast**: WCAG AA compliant colors
+
+## 📦 Build and Deployment
+
+### Production Build
+```bash
+npm run build
+# or
+ng build --configuration production
+```
+
+The build artifacts will be stored in the `dist/` directory.
+
+### Build Optimization
+- **Tree Shaking**: Removes unused code
+- **Lazy Loading**: Route-based code splitting
+- **Bundle Analysis**: Use `ng build --stats-json` + webpack-bundle-analyzer
+
+## 🔧 Configuration
+
+### Environment Configuration
+The app uses Angular's environment system for different configurations:
+
+```typescript
+// src/environments/environment.ts
+export const environment = {
+  production: false,
+  apiUrl: 'https://dummyjson.com'
+};
+```
+
+### NgRx DevTools
+Development builds include NgRx DevTools for state debugging:
+- Time travel debugging
+- Action logging
+- State inspection
+
+## 🐛 Known Issues and Limitations
+
+1. **API Limitations**: TurtleJSON API doesn't persist favorites, so they're stored client-side only
+2. **Authentication**: Demo API tokens have limited lifespan
+3. **Images**: Some product images may fail to load due to external URLs
+
+## 🙏 Acknowledgments
+
+- [DummyJson](https://dummyjson.com) for the API
+- [PrimeNG](https://primeng.org) for UI components
+- [Tailwind CSS](https://tailwindcss.com) for styling utilities
+- [NgRx](https://ngrx.io) for state management
+
+
+**Built with ❤️ using Angular, NgRx, PrimeNG, and Tailwind CSS**

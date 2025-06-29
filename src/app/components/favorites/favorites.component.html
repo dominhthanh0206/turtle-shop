@@ -1,0 +1,137 @@
+<div class="min-h-screen bg-gray-50">
+  <p-toast></p-toast>
+  
+  <p-toolbar class="bg-orange-600 text-white shadow-lg">
+    <div class="flex items-center justify-between w-full">
+      <div class="flex items-center space-x-4">
+        <h1 class="text-xl font-bold">TurtleShop</h1>
+        <span class="text-orange-100">Favorites</span>
+      </div>
+      
+      <div class="flex items-center space-x-4">
+        @if (user$ | async; as user) {
+          <span class="hidden md:block text-sm text-orange-500">
+            Welcome, {{ user.firstName }}!
+          </span>
+        }
+        
+        <p-button 
+          label="Back to Products"
+          data-cy="back-to-products"
+          icon="pi pi-arrow-left"
+          severity="secondary"
+          (click)="goToProducts()">
+        </p-button>
+        
+        <p-button 
+          label="Logout"
+          icon="pi pi-sign-out"
+          severity="secondary"
+          (click)="onLogout()">
+        </p-button>
+      </div>
+    </div>
+  </p-toolbar>
+    
+  <div class="container mx-auto px-4 py-8">
+    <div class="mb-8">
+      <h2 class="text-3xl font-bold text-gray-800 mb-2">Your Favorite Products</h2>
+      <p class="text-gray-600">
+        Products you've marked as favorites. Note: Unmarked items will remain visible until you navigate away.
+      </p>
+    </div>
+
+    @if (getVisibleProducts().length === 0) {
+      <div class="flex flex-col items-center justify-center py-20">
+        <i class="pi pi-heart text-6xl text-gray-300 mb-6"></i>
+        <h3 class="text-2xl font-semibold text-gray-600 mb-4">No favorites yet</h3>
+        <p class="text-gray-500 mb-8 text-center max-w-md">
+          You haven't added any products to your favorites. 
+          Browse our products and click the heart icon to add them here!
+        </p>
+        <p-button 
+          label="Browse Products"
+          icon="pi pi-shopping-cart"
+          size="large"
+          (click)="goToProducts()">
+        </p-button>
+      </div>
+    }
+    
+    @else {
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        @for (product of getVisibleProducts(); track product.id) {
+          <p-card data-cy="favorite-product" class="favorite-card h-full">
+            <ng-template pTemplate="header">
+              <div class="relative overflow-hidden">
+                <img 
+                  [src]="product.thumbnail" 
+                  [alt]="product.title"
+                  class="w-full h-48 object-cover transition-transform hover:scale-105"
+                  (error)="onImageError($event)">
+                
+                <p-button 
+                  data-cy="favorite-button"
+                  [icon]="product.isFavorite ? 'pi pi-heart-fill' : 'pi pi-heart'"
+                  [severity]="product.isFavorite ? 'danger' : 'secondary'"
+                  [rounded]="true"
+                  class="absolute top-2 right-2 favorite-btn"
+                  (click)="onToggleFavorite(product.id)">
+                </p-button>
+                
+                @if (!product.isFavorite) {
+                  <div class="absolute top-2 left-2 bg-yellow-500 text-white px-2 py-1 rounded text-xs font-semibold">
+                    Will be removed
+                  </div>
+                }
+              </div>
+            </ng-template>
+
+            <div class="space-y-3">
+              <h3 class="text-lg font-semibold text-gray-800 line-clamp-2">
+                {{ product.title }}
+              </h3>
+              
+              <p class="text-sm text-gray-600 line-clamp-3">
+                {{ product.description }}
+              </p>
+              
+              <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                  <span class="text-2xl font-bold text-orange-600">
+                    ${{ product.price }}
+                  </span>
+                  @if (product.discountPercentage > 0) {
+                    <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">
+                      {{ product.discountPercentage }}% OFF
+                    </span>
+                  }
+                </div>
+              </div>
+              
+              <div class="flex items-center space-x-1">
+                <i class="pi pi-star-fill text-yellow-400"></i>
+                <span class="text-sm text-gray-600">{{ product.rating }}/5</span>
+                <span class="text-xs text-gray-400">({{ product.reviews.length || 0 }} reviews)</span>
+              </div>
+              
+              <div class="pt-2 border-t border-gray-200">
+                @if (product.isFavorite) {
+                  <div class="flex items-center text-green-600 text-sm">
+                    <i class="pi pi-check-circle mr-2"></i>
+                    <span>In favorites</span>
+                  </div>
+                } @else {
+                  <div class="flex items-center text-yellow-600 text-sm">
+                    <i class="pi pi-exclamation-triangle mr-2"></i>
+                    <span>Removed from favorites (visible until you leave this page)</span>
+                  </div>
+                }
+              </div>
+            </div>
+          </p-card>
+        }
+      </div>
+    }
+  </div>
+</div> 

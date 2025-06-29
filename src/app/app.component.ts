@@ -1,5 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { AppState } from './store';
+import { checkAuthStatus } from './store/auth/auth.actions';
 
 @Component({
   selector: 'app-root',
@@ -8,6 +11,12 @@ import { RouterOutlet } from '@angular/router';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent {
-  title = 'shop-web-app';
+export class AppComponent implements OnInit {
+  title = 'TurtleShop';
+
+  constructor(private store: Store<AppState>) {}
+
+  ngOnInit(): void {
+    this.store.dispatch(checkAuthStatus());
+  }
 }
