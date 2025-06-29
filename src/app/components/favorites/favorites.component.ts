@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
-// PrimeNG imports
 import { ToolbarModule } from 'primeng/toolbar';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
@@ -35,7 +34,6 @@ import { selectUser } from '../../store/auth/auth.selectors';
 export class FavoritesComponent implements OnInit {
   favoriteProducts$: Observable<Product[]>;
   user$: Observable<any>;
-  // Track products that were unmarked but should still be visible until page navigation
   visibleProducts: Product[] = [];
 
   constructor(
@@ -48,16 +46,12 @@ export class FavoritesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Load initial visible products
     this.favoriteProducts$.subscribe(favorites => {
-      // Add null check to prevent "not iterable" error
       if (!favorites) return;
       
-      // On initial load or when coming back to the page, sync with current favorites
       if (this.visibleProducts.length === 0) {
         this.visibleProducts = [...favorites];
       } else {
-        // Update existing products that are still favorites
         this.visibleProducts = this.visibleProducts.map(visible => {
           const updated = favorites.find(fav => fav.id === visible.id);
           return updated || visible;
@@ -69,8 +63,6 @@ export class FavoritesComponent implements OnInit {
   onToggleFavorite(productId: number): void {
     this.store.dispatch(toggleFavorite({ productId }));
     
-    // Update the visible product's favorite status immediately
-    // but keep it visible until navigation
     this.visibleProducts = this.visibleProducts.map(product => 
       product.id === productId 
         ? { ...product, isFavorite: !product.isFavorite }
