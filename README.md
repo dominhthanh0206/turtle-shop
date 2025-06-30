@@ -2,6 +2,15 @@
 
 A modern Angular web application built with standalone components, NgRx state management, PrimeNG UI components, and Tailwind CSS.
 
+## ⚡ Quick Start
+
+```bash
+npm install
+npm run dev  # Development with hot reload → http://localhost:4200
+```
+
+**Demo login:** `emilys` / `emilyspass`
+
 ## 🚀 Features
 
 - **🔐 Authentication System**: Secure login with JWT token management
@@ -99,20 +108,58 @@ cd shop-web-app
 npm install
 ```
 
-### 2. Development Server
+### 2. Development Server (with Hot Reload)
 
 ```bash
-npm start
+npm run dev
 # or
 ng serve
 ```
 
-Navigate to `http://localhost:4200`. The application will automatically reload if you change any source files.
+Navigate to `http://localhost:4200`. The application will automatically reload when you change source files.
 
-### 3. Demo Credentials
+### 3. Production SSR Server
+
+To run production server with Server-Side Rendering:
+
+```bash
+# Build the application first
+npm run build
+
+# Run production server
+npm start
+# or with custom port
+PORT=4001 npm start
+```
+
+Navigate to `http://localhost:4000` (or specified port).
+
+### 4. Demo Credentials
 
 **Username**: `emilys`  
 **Password**: `emilyspass`
+
+## 🔧 Development vs Production
+
+### Development Mode
+- **Command**: `npm run dev` or `ng serve`
+- **Port**: `http://localhost:4200`
+- **Features**: 
+  - Hot reload (automatically reload on changes)
+  - Source maps for debugging
+  - Live reload when saving files
+  - Angular DevTools support
+
+### Production Mode (SSR)
+- **Command**: `npm run build` → `npm start`
+- **Port**: `http://localhost:4000` (can be changed with PORT env)
+- **Features**:
+  - Server-Side Rendering (SSR)
+  - Optimized bundles (minified, tree-shaken)
+  - Production performance
+  - REQUIRES rebuild on every code change
+
+**Recommendation**: Use `npm run dev` for development, `npm start` only to test production build.
 
 ## 🧪 Testing
 
@@ -126,7 +173,7 @@ ng test
 ### E2E Tests
 ```bash
 # Start the development server first
-npm start
+npm run dev
 
 # In another terminal
 npm run e2e
