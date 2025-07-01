@@ -12,15 +12,12 @@ export class ProductService {
   constructor(private http: HttpClient) {}
 
   getProducts(): Observable<ProductsResponse> {
-    // Use public endpoint - no auth required
     return this.http.get<ProductsResponse>(`${this.apiUrl}/products`);
   }
 
   getAuthenticatedProducts(): Observable<ProductsResponse> {
-    // Use authenticated endpoint if needed
     const token = this.getAuthToken();
     if (!token) {
-      // Fallback to public endpoint if no token
       return this.getProducts();
     }
     

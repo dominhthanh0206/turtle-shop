@@ -53,7 +53,6 @@ describe('ProductService', () => {
     service = TestBed.inject(ProductService);
     httpMock = TestBed.inject(HttpTestingController);
     
-    // Clear localStorage before each test
     localStorage.clear();
   });
 
@@ -77,7 +76,6 @@ describe('ProductService', () => {
   });
 
   it('should get authenticated products when token exists', () => {
-    // Set up user data in localStorage
     const userData = {
       token: 'test-token'
     };
@@ -94,7 +92,6 @@ describe('ProductService', () => {
   });
 
   it('should fallback to public endpoint when no token exists', () => {
-    // No token in localStorage
     service.getAuthenticatedProducts().subscribe(response => {
       expect(response).toEqual(mockProductsResponse);
     });
@@ -106,7 +103,6 @@ describe('ProductService', () => {
   });
 
   it('should fallback to public endpoint when user data is invalid JSON', () => {
-    // Set invalid JSON in localStorage
     localStorage.setItem('user', 'invalid-json');
 
     service.getAuthenticatedProducts().subscribe(response => {

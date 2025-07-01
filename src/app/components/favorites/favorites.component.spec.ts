@@ -98,7 +98,6 @@ describe('FavoritesComponent', () => {
   });
 
   it('should handle null favorites on init', fakeAsync(() => {
-    // Setup store mock to return null favorites
     mockStore.select.and.callFake((selector: any) => {
       const selectorStr = selector.toString();
       if (selectorStr.includes('selectFavoriteProducts')) {
@@ -109,7 +108,6 @@ describe('FavoritesComponent', () => {
       return of(null);
     });
 
-    // Create new component with updated mock
     const newFixture = TestBed.createComponent(FavoritesComponent);
     const newComponent = newFixture.componentInstance;
 
@@ -120,10 +118,8 @@ describe('FavoritesComponent', () => {
   }));
 
   it('should preserve unmarked products in visible list', fakeAsync(() => {
-    // Create component first with initial data
     component.visibleProducts = [...mockFavoriteProducts];
     
-    // Setup store mock to return no favorite products
     mockStore.select.and.callFake((selector: any) => {
       const selectorStr = selector.toString();
       if (selectorStr.includes('selectFavoriteProducts')) {
@@ -137,7 +133,6 @@ describe('FavoritesComponent', () => {
     component.ngOnInit();
     tick();
     
-    // Should preserve the unmarked product in visible list
     expect(component.visibleProducts.length).toBe(1);
   }));
 
@@ -166,7 +161,6 @@ describe('FavoritesComponent', () => {
     
     component.onToggleFavorite(nonExistentProductId);
     
-    // Original product should remain unchanged
     expect(component.visibleProducts[0].isFavorite).toBeTruthy();
   });
 
@@ -202,10 +196,8 @@ describe('FavoritesComponent', () => {
   it('should keep unmarked products visible until navigation', () => {
     component.visibleProducts = [...mockFavoriteProducts];
     
-    // Toggle favorite (unmark)
     component.onToggleFavorite(1);
     
-    // Product should still be in visible products but marked as not favorite
     expect(component.visibleProducts.length).toBe(1);
     expect(component.visibleProducts[0].isFavorite).toBeFalsy();
   });

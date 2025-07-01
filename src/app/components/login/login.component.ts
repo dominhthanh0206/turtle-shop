@@ -63,7 +63,6 @@ export class LoginComponent implements OnInit {
       }
     });
 
-    // Handle login errors
     this.error$.subscribe(error => {
       if (error) {
         this.messageService.add({
