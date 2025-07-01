@@ -1,4 +1,4 @@
-# TurtleShop - Angular E-commerce Application
+# ThanhDoShop - Angular E-commerce Application
 
 A modern Angular web application built with standalone components, NgRx state management, PrimeNG UI components, and Tailwind CSS.
 
@@ -47,7 +47,7 @@ src/app/store/
 1. **Session-based Favorites Logic**: The most complex part is the favorites management system:
    - Products marked as favorites are stored in memory using a `Set<number>` for O(1) lookup performance
    - When a user unmarks a favorite on the favorites page, the product remains visible until navigation
-   - This is achieved by maintaining a `visibleProducts` array in the FavoritesComponent that tracks the UI state separately from the NgRx store
+   - This is achieved by maintaining a `visibleProducts` array in    the FavoritesComponent that tracks the UI state separately from the NgRx store
    - The store maintains the source of truth for actual favorites, while the component manages the "temporary visibility" requirement
 
 2. **Authentication Flow with Effects**: 
@@ -245,7 +245,7 @@ Development builds include NgRx DevTools for state debugging:
 
 ## 🐛 Known Issues and Limitations
 
-1. **API Limitations**: TurtleJSON API doesn't persist favorites, so they're stored client-side only
+1. **API Limitations**: DummyJSON API doesn't persist favorites, so they're stored client-side only
 2. **Authentication**: Demo API tokens have limited lifespan
 3. **Images**: Some product images may fail to load due to external URLs
 

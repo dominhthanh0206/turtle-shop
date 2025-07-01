@@ -52,22 +52,27 @@ export class FavoritesComponent implements OnInit {
       if (this.visibleProducts.length === 0) {
         this.visibleProducts = [...favorites];
       } else {
+        const favoriteIds = new Set(favorites.map(f => f.id));
+        
         this.visibleProducts = this.visibleProducts.map(visible => {
-          const updated = favorites.find(fav => fav.id === visible.id);
-          return updated || visible;
+          const updatedFavorite = favorites.find(fav => fav.id === visible.id);
+          if (updatedFavorite) {
+            return updatedFavorite;
+          } else {
+            return { ...visible, isFavorite: false };
+          }
         });
+        
+        const newFavorites = favorites.filter(fav => 
+          !this.visibleProducts.some(visible => visible.id === fav.id)
+        );
+        this.visibleProducts = [...this.visibleProducts, ...newFavorites];
       }
     });
   }
 
   onToggleFavorite(productId: number): void {
     this.store.dispatch(toggleFavorite({ productId }));
-    
-    this.visibleProducts = this.visibleProducts.map(product => 
-      product.id === productId 
-        ? { ...product, isFavorite: !product.isFavorite }
-        : product
-    );
   }
 
   goToProducts(): void {

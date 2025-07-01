@@ -4,7 +4,7 @@
   <p-toolbar class="bg-orange-600 text-white shadow-lg">
     <div class="flex items-center justify-between w-full">
       <div class="flex items-center space-x-4">
-        <h1 class="text-xl font-bold">TurtleShop</h1>
+        <h1 class="text-xl font-bold">ThanhDoShop</h1>
         <span class="text-orange-100">Favorites</span>
       </div>
       
@@ -113,20 +113,6 @@
                 <i class="pi pi-star-fill text-yellow-400"></i>
                 <span class="text-sm text-gray-600">{{ product.rating }}/5</span>
                 <span class="text-xs text-gray-400">({{ product.reviews.length || 0 }} reviews)</span>
-              </div>
-              
-              <div class="pt-2 border-t border-gray-200">
-                @if (product.isFavorite) {
-                  <div class="flex items-center text-green-600 text-sm">
-                    <i class="pi pi-check-circle mr-2"></i>
-                    <span>In favorites</span>
-                  </div>
-                } @else {
-                  <div class="flex items-center text-yellow-600 text-sm">
-                    <i class="pi pi-exclamation-triangle mr-2"></i>
-                    <span>Removed from favorites (visible until you leave this page)</span>
-                  </div>
-                }
               </div>
             </div>
           </p-card>

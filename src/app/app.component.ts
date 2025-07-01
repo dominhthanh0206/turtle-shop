@@ -12,7 +12,7 @@ import { checkAuthStatus } from './store/auth/auth.actions';
   styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit {
-  title = 'TurtleShop';
+  title = 'ThanhDoShop';
 
   constructor(private store: Store<AppState>) {}
 

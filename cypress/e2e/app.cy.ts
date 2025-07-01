@@ -1,4 +1,4 @@
-describe('TurtleShop E2E Tests', () => {
+describe('ThanhDoShop E2E Tests', () => {
   beforeEach(() => {
     // Clear localStorage before each test
     cy.clearLocalStorage();
