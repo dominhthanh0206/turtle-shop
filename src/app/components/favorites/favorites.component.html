@@ -67,7 +67,7 @@
                 <img 
                   [src]="product.thumbnail" 
                   [alt]="product.title"
-                  class="w-full h-48 object-cover transition-transform hover:scale-105"
+                  class="w-full h-48 object-contain transition-transform hover:scale-105 bg-gray-100"
                   (error)="onImageError($event)">
                 
                 <p-button 
